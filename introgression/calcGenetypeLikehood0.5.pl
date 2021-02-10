@@ -1,7 +1,8 @@
-#和版本0.2相比，不在使用有效的位点计算比例，而是使用群体的材料数量作为比例计算的分母，因为有效位点个数不合理，比如目标群非渐渗个体在此位点有很少的有效位点，这样计算出来的比例就会很高。
-my $file=$ARGV[0]; #vcf文件
-my $popu1=$ARGV[1]; #目标群(计算群)
-my $popu2=$ARGV[2]; #参考群（来源群）
+
+## 
+my $file=$ARGV[0]; # The vcf file name which contain complete path 
+my $popu1=$ARGV[1]; # The file name of the group which is the object of introgression 
+my $popu2=$ARGV[2]; # The file name of the group which is the source of introgression
 
 
 open(IN,$file) or die "not find $file!\n";
@@ -42,17 +43,16 @@ close(POPU);
 
 my @result=();
 
-my %diffMap=(); #统计相似率差异分布
-
+my %diffMap=(); 
 while(<IN>) {
 	chomp ;
 	my @a=split "\t";	
 
         my %map1=();
-        foreach $i (0 .. $popu1Count-1){ #目标群体的各个碱基的数量
+        foreach $i (0 .. $popu1Count-1){ 
                 my @b=split ":",$a[$popu1[$i][1]];
                 if ($b[0] ne "./."){
-			my @c=split "/",$b[0]; #考虑杂合
+			my @c=split "/",$b[0]; 
 			if ($c[0] ne $c[1]) {
                        		$map1{$c[0]}++;
 				$map1{$c[1]}++;
@@ -64,7 +64,7 @@ while(<IN>) {
 
 
         my %map2=();
-        foreach $i (0 .. $popu2Count-1){ #参考群体的各个剑姬的数量
+        foreach $i (0 .. $popu2Count-1){ 
                 my @b=split ":",$a[$popu2[$i][1]];
                 if ($b[0] ne "./."){
 			my @c=split "/",$b[0]; 
@@ -80,7 +80,7 @@ while(<IN>) {
 	my $pos=$a[1];
 	
 	print $pos;
-	foreach $i (0 .. $popu1Count-1){ #计算每个位点的两个群相似度差 
+	foreach $i (0 .. $popu1Count-1){ # Calculate the ratio diff between two group
 		my @b=split ":",$a[$popu1[$i][1]];
 		my $diff=0.0;		
 		if ($b[0] ne "./."){
